@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
+from rest_framework.generics import DestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -102,3 +104,12 @@ class RejaDeleteAPIView(APIView):
             return Response("User faqat o'ziga tegishli bo'lgan rejalarni o'chira oladi!",
                             status=status.HTTP_400_BAD_REQUEST)
         return Response(status=401)
+
+
+class RejaDestroyAPIView(DestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Reja.objects.all()
+    serializer_class = RejaSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
