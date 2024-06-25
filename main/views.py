@@ -86,6 +86,13 @@ class RejaTahrirlashAPIView(APIView):
 
 
 class RejaDeleteAPIView(APIView):
+    @swagger_auto_schema(
+        responses={
+            204: openapi.Response(description="Reja muvaffaqiyatli o'zgartirildi!"),
+            400: openapi.Response(description="User faqat o'ziga tegishli bo'lgan rejalarni o'chira oladi!"),
+            401: openapi.Response(description="Foydalanuvchi autentifikatsiya qilinmagan"),
+        }
+    )
     def delete(self, request, reja_id):
         if request.user.is_authenticated:
             reja = get_object_or_404(Reja, id=reja_id)
